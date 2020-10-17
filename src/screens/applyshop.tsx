@@ -1,9 +1,11 @@
 import * as React from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, Image, TouchableWithoutFeedback, Keyboard, TextInput, Alert } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, Image, TouchableWithoutFeedback, Keyboard, TextInput, Alert, PermissionsAndroid } from 'react-native';
 import { Button } from 'react-native-elements';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
 const phone = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 export interface CreatAcountProps {
     navigation: any
@@ -15,44 +17,109 @@ export default class CreatAcountComponent extends React.Component<CreatAcountPro
     constructor(props: CreatAcountProps) {
         super(props);
         this.state = {
-            form: {}
+            form: {},
+            latitude: '',
+            longitude: '',
         }
-
-		    }
+            }
+            
     createAccount() {
-        Geolocation.getCurrentPosition(
-			//Will give you the current location
-			(position) => {
-                const coordinatesData = { longitude: position.coords.longitude, latitude: position.coords.latitude };
-                this.setState({coodinates: coordinatesData})
-                alert('coordinatesData');
+        fetch("https://2b1115a1f1af.ngrok.io/shop", {
+          method: "Post",
+          headers: {
+            'Content-Type': 'Application/json'
+          },
+          body: JSON.stringify({
+            "username": this.state.form.username,
+            "contactinfo": this.state.form.contactinfo,
+            "city": this.state.form.city,
+            "idcard": this.state.form.idcard,
+            "adress": this.state.form.adress,
+            "minimumprice": this.state.form.minimumprice,
+            "aboutyourself": this.state.form.aboutyourself,
+            "latitude": this.state.latitude,
+            "longitude": this.state.longitude,
+            // "coordinates": coordinatesData
 
-                fetch("", {
-                    method: "Post",
-                    headers: {
-                        'Content-Type': 'Application/json'
-                    },
-                    body: JSON.stringify({
-                        "username": this.state.form.username,
-                        "contactinfo": this.state.form.contactinfo,
-                        "idcard": this.state.form.idcard,
-                        "adress": this.state.form.adress,
-                        "minimumprice": this.state.form.minimumprice,
-                        "aboutyourself": this.state.form.aboutyourself,
-                        "coordinates": coordinatesData
-                    })
+        })
+          
+        }
+        ).then(response => response.json())
+          .then(data => {
+            // AsyncStorage.setItem('name',data.username);
+            // AsyncStorage.setItem('token' ,(data.userId)).then((res) => {
+              console.log(data.userId)      
+              alert('shop registered')
+            })
+          }  
+
+        //   async requestlocationPermission() {
+        //     try {
+        //       const granted = await PermissionsAndroid.request(
+        //         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+        //       )
+        //       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        //         alert("Location permission denied")
+
+        //                   this.getCurrentLocation()
+
+    
+        //       } else {
+        //         alert("Location permission denied")
+        //       }
+        //     } catch (err) {
+        //       console.warn(err)
+        //       }
+        //     }
+        async requestlocationPermission() {
+            const chckLocationPermission = PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+            if (chckLocationPermission === PermissionsAndroid.RESULTS.GRANTED) {
+                alert("You've access for the location");
+                this.getCurrentLocation()
+                
+            } else {
+                try {
+                    const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                        {
+                            'title': 'Location Access required ',
+                            'message': 'this location is the exect location of your shop  which you want to registered ' +
+                                'kindle apply for  your shop when you are in the shop'+
         
-                }).then((data: any) => {
-                    console.log("account created");
-                })
-			}, (error) => alert(error.message), {
-			enableHighAccuracy: true, timeout: 20000, maximumAge: 1000
-		});
-
-
-
         
-    }
+                                alert('tap me') ,
+                        }
+                    )
+                    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                        alert("You've access for the location");
+                        this.getCurrentLocation()
+                    } else {
+                        alert("You don't have access for the location");
+                    }
+                } catch (err) {
+                    alert(err)
+                }
+            }
+        };
+
+        componentDidMount() {
+            this.requestlocationPermission()
+    
+        }
+    
+        
+        getCurrentLocation() {
+            Geolocation.getCurrentPosition((position) => {
+                const coordinatesdata = [position.coords.longitude, position.coords.latitude];
+                setTimeout(() => {
+                    this.setState({
+                                           latitude: position.coords.latitude,
+                                            longitude: position.coords.longitude,
+                                        });
+                }, 100);
+            }, (error) => alert(error.message), {
+                enableHighAccuracy: true, timeout: 20000, maximumAge: 1000
+            });
+        }
     public render() {
         return (
             // <ImageBackground source={require('../screens/assets/hardware-computer-computer-service-technology.jpg')} style={styles.container}>
@@ -65,9 +132,9 @@ export default class CreatAcountComponent extends React.Component<CreatAcountPro
                     </View>
 
                     <Formik
-                        initialValues={{ username: '', adress: '', contactinfo: '', idcard: '' ,minimumprice:'',aboutyourself:''}}
+                        initialValues={{ username: '', adress: '', contactinfo: '', idcard: '' ,minimumprice:'',aboutyourself:'',city: '',}}
                         validationSchema={Yup.object({
-
+                            
                             username: Yup.string()
                             .required('Required'),
 
@@ -76,26 +143,29 @@ export default class CreatAcountComponent extends React.Component<CreatAcountPro
                             .matches(phone, 'Phone number is not valid')
                             .min(11, "to short")
                             .max(11, "to long"),
-
+                            
                             idcard:Yup.string()
                             .required("required")
                             .matches(phone, 'Id Card is not valid')
                             .min(13, "to short")
                             .max(13, "to long"),
-
+                            
                             adress:Yup.string()
                             .required(),
-                              
+                            
                             minimumprice: Yup.number()
 
                                 .required('Required'),
-                            aboutyourself: Yup.string()
+                                aboutyourself: Yup.string()
+
+                                .required('Required'),
+                                city: Yup.string()
 
                                 .required('Required'),
 
-
-                        })}
-
+                                
+                            })}
+                            
                         onSubmit={(values, actions) => {
                             console.log(values);
                             this.setState({ form: values });
@@ -103,9 +173,10 @@ export default class CreatAcountComponent extends React.Component<CreatAcountPro
                             actions.resetForm();
                         }}>
                         {props => (
-
+                            
                             <View>
 
+                                <KeyboardAwareScrollView>
                                 <TextInput
                                     onChangeText={props.handleChange('username')}
                                     onBlur={props.handleBlur('username')}
@@ -115,6 +186,15 @@ export default class CreatAcountComponent extends React.Component<CreatAcountPro
                                     style={styles.input}
                                 />
                                 <Text style={styles.error}>{props.touched.username && props.errors.username}</Text>
+                                <TextInput
+                                    onChangeText={props.handleChange('city')}
+                                    onBlur={props.handleBlur('city')}
+                                    value={props.values.city}
+                                    autoFocus
+                                    placeholder="city"
+                                    style={styles.input}
+                                />
+                            <Text style={styles.error}>{props.touched.city && props.errors.city}</Text>
                                 <TextInput
                                     onChangeText={props.handleChange('contactinfo')}
                                     onBlur={props.handleBlur('contactinfo')}
@@ -160,11 +240,12 @@ export default class CreatAcountComponent extends React.Component<CreatAcountPro
 
                                 />
                                 <Text style={styles.error}>{props.touched.aboutyourself && props.errors.aboutyourself}</Text>
+                                    </KeyboardAwareScrollView>
                                 <TouchableOpacity onPress={props.handleSubmit} style={styles.button} >
                                     <Text style={styles.buttext}  >Apply</Text>
                                 </TouchableOpacity>
                                 <View style={{ justifyContent: "center", alignItems: 'center', marginTop: 10 }}>
-                                    <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', margin: 20 }}>
+                                    <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center',  }}>
                                         {/* <FontAwesome name='heart' color={'white'} size={35} /> */}
                                         <Text style={{}} >Go Back To </Text>
                                         <Text onPress={() => this.props.navigation.navigate('home')} style={{ fontWeight: 'bold' }} >Home page!</Text>
@@ -178,7 +259,7 @@ export default class CreatAcountComponent extends React.Component<CreatAcountPro
 
                 </View>
             </TouchableWithoutFeedback>
-            // </ImageBackground>
+        
         );
     }
 }
@@ -187,11 +268,14 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#ecf0f1',
-        padding: 15,
+        paddingLeft: 15,
+        paddingRight: 15,
+        marginBottom: 15
+        
     },
     button: {
         alignItems: 'center',
-        backgroundColor: '#0984e3',
+        backgroundColor: '#30336b',
         paddingTop: 10,
         paddingBottom: 10,
         paddingLeft: 100,
@@ -209,23 +293,24 @@ const styles = StyleSheet.create({
     },
 
     swiperimg: {
-        height: hp('15'),
-        width: wp('30'),
+        height: hp('12'),
+        width: wp('24'),
 
 
     },
 
     logo: {
         alignItems: 'center',
-        margin: hp('4'),
+        margin: hp('3'),
     },
     textDetail: {
-        fontSize: hp('4'),
+        fontSize: hp('3'),
         textAlign: 'center',
         fontFamily: 'serif',
-
+        color: '#30336b',
+        fontWeight: 'bold',
+        fontStyle: 'italic'
     },
-
     title: {
         padding: 90,
         fontSize: 34,
@@ -244,7 +329,6 @@ const styles = StyleSheet.create({
         borderColor: '#ddd',
         borderWidth: 1,
         backgroundColor: '#fff',
-
     },
 });
 

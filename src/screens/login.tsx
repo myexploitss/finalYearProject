@@ -1,7 +1,7 @@
 
 
 import * as React from 'react';
-import { StyleSheet, Text, View, Button, TextInput, TouchableWithoutFeedback, TouchableOpacity, Keyboard, ImageBackground, Image, StatusBar } from "react-native";
+import { StyleSheet, Text, View, Button, TextInput, TouchableWithoutFeedback, TouchableOpacity, Keyboard, ImageBackground, Image, StatusBar, AsyncStorage } from "react-native";
 import 'react-native-gesture-handler';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -27,37 +27,38 @@ export default class loginComponent extends React.Component<loginProps, loginSta
     }
   }
     
-login() {
-  fetch("https://8fee5886efcc.ngrok.io/login", {
-    method: "Post",
-    headers: {
-      'Content-Type': 'Application/json'
-    },
-    body: JSON.stringify({
-      "email": this.state.form.email,
-      "password": this.state.form.password
-    })
-  }
-  ).then(response => response.json())
-    .then(data => {
-
-      // AsyncStorage.setItem('name',data.username);
-      // AsyncStorage.setItem('token' ,(data.userId)).then((res) => {
-      //   console.log(data.userId)      
-        alert('login Succesfully')
+  login() {
+    console.log("called")
+    fetch("https://2b1115a1f1af.ngrok.io/login", {
+      method: "Post",
+      headers: {
+        'Content-Type': 'Application/json'
+      },
+      body: JSON.stringify({
+        "email": this.state.form.email,
+        "password": this.state.form.password
       })
-    
-     
-    }  
-
-
-
+    }
+    ).then(response => response.json())
+      .then(data => {
+  
+        AsyncStorage.setItem('username',data.username);
+        console.log(data.username)   
+        AsyncStorage.setItem('userId' ,(data.userId)).then((res) => {
+          console.log(data.userId)      
+          alert('login Succesfully')
+        
+        })
+      })
+      }  
+  
+  
   render() {
 
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
-          <StatusBar backgroundColor="#0984e3" />
+          {/* <StatusBar backgroundColor="#0984e3" /> */}
           <View style={styles.logo} >
             <Image source={require('../screens/assets/loginlogo.png')} style={styles.swiperimg} ></Image>
             <Text style={styles.textDetail} >SystemFixer</Text>
@@ -66,10 +67,8 @@ login() {
 
           <Formik
 
-            initialValues={{ username: '', email: '', password: '' }}
+            initialValues={{ email: '', password: '' }}
             validationSchema={Yup.object({
-              username: Yup.string()
-                .required('Required'),
               email: Yup.string()
                 .email('Invalid Email')
                 .required('Required'),
@@ -85,15 +84,15 @@ login() {
             {props => (
               <View style={styles.colors} >
                 <TextInput
-                  onChangeText={props.handleChange('username')}
-                  onBlur={props.handleBlur('username')}
-                  value={props.values.username}
+                  onChangeText={props.handleChange('email')}
+                  onBlur={props.handleBlur('email')}
+                  value={props.values.email}
                   autoFocus
-                  placeholder="Username"
+                  placeholder="email"
                   style={styles.input}
                   placeholderTextColor="#7f7e87"
                 />
-                <Text style={styles.error}>{props.errors.username}</Text>
+                <Text style={styles.error}>{props.errors.email}</Text>
                 <TextInput
                   onChangeText={props.handleChange('password')}
                   onBlur={props.handleBlur('password')}
@@ -102,20 +101,23 @@ login() {
                   style={styles.input}
                   placeholderTextColor="#7f7e87"
                 />
-                <Text style={styles.error}>{props.errors.password}</Text>
+                <Text style={styles.error}>{props.touched.password&&props.errors.password}</Text>
                
                 {/* <TouchableOpacity onPress={props.handleSubmit} style={styles.button} > */}
-                <TouchableOpacity onPress={() => this.props.navigation.navigate('home')} style={styles.button} >
+                <TouchableOpacity onPress={props.handleSubmit} style={styles.button} >
                   <Text style={styles.buttext}  >Log in</Text>
                 </TouchableOpacity>
+                <TouchableOpacity   onPress={() => this.props.navigation.navigate('testhome')}  >
+
                 <View style={{justifyContent: "center",alignItems:'center',marginTop:40}}>
                 <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', margin: 20 }}>
-                  {/* <FontAwesome name='heart' color={'white'} size={35} /> */}
-                  <Text style={{}} >Don't Have an Account? </Text>
-                  <Text onPress={() => this.props.navigation.navigate('signup')} style={{ fontWeight: 'bold' }} >Sign Up!</Text>
+      
+                  <Text style={{color:'#7f7e87'}} >Don't Have an Account? </Text>
+                  <Text style={{ fontWeight: 'bold' }} >Sign Up!</Text>
                 </View>
-                <Text>Forgot Password?</Text>
+                <Text style={{color:'#7f7e87'}} >Forgot Password?</Text>
                 </View>
+                </TouchableOpacity>
                 
                  
               </View>
@@ -183,7 +185,7 @@ const styles = StyleSheet.create({
 
   button: {
     alignItems: 'center',
-    backgroundColor: '#0984e3',
+    backgroundColor: '#30336b',
     paddingTop: 10,
     paddingBottom: 10,
     paddingLeft: 100,

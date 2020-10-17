@@ -2,14 +2,20 @@ import * as React from 'react';
 import { View, StyleSheet, Text, StatusBar, Image, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { Card, Badge, } from 'react-native-elements'
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Fontisto from 'react-native-vector-icons/Fontisto';
+import Octicons from 'react-native-vector-icons/Octicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Foundation from 'react-native-vector-icons/Foundation';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
 import { AsyncStorage } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Swiper from 'react-native-swiper';
+import hardwarestartComponent from '../screens/hardwarestart';
+// hardwarestart(){
 
+// }
 export interface testhomeProps {
     navigation: any
 }
@@ -21,24 +27,9 @@ export default class testhomeComponent extends React.Component<testhomeProps, te
     constructor(props: testhomeProps) {
         super(props);
         this.state = {
-            username: String
+            username: String,
+    
         };
-    }
-    getuserDetails() {
-
-        // return fetch('https://5e98ec77c013.ngrok.io/donateBlood')
-        //   .then((response) => response.json())
-        //   .then((json) => {
-
-        //    this.setState({
-        //       dataBlood: json
-
-        //     })
-        // })
-        //   .catch((error) => {
-        //     console.error(error);
-        //   });
-
     }
     componentDidMount() {
         // this.getuserDetails()
@@ -52,43 +43,46 @@ export default class testhomeComponent extends React.Component<testhomeProps, te
             }
         })
     }
-    // removeItem() {
-    //     console.log("remove called")
-    //     const userId = AsyncStorage.getItem('userId', (err, userId) => {
-    //         if (userId) {
-    //             console.log(userId)
-    //         } else {
-    //             console.log("no id")
-    //         }
-    //     })
+    removeItem() {
+        console.log("remove called")
+        const userId = AsyncStorage.getItem('userId', (err, userId) => {
+            if (userId) {
+                console.log(userId)
+            } else {
+                console.log("no id")
+            }
+        })
 
-    //     AsyncStorage.removeItem('userId').then(() => {
+        AsyncStorage.removeItem('userId').then(() => {
 
-    //     })
-    // }
+        })
+    }
     public render() {
         return (
             <View style={styles.container} >
-                <StatusBar backgroundColor="black" />
+                <StatusBar backgroundColor="#30336b" />
+                <View style={{flexDirection: 'row-reverse',backgroundColor:'#30336b'}} >
+
                 <View style={styles.logout}>
-                    <View>
-                        <Text style={{color:'white'}} >hassem</Text>
-                    </View>
                     <AntDesign onPress={() => this.removeItem()} name='logout' color={'white'} size={25} />
                 </View>
-                <View style={{ marginLeft: 5, marginRight: 5, flex: 1, backgroundColor: '#2e2e2e' }}>
+                <View style={{justifyContent:'center',alignItems: 'center',backgroundColor:'#30336b',paddingRight:60}}>
+                        <Text  style={{color:'white' ,fontSize:25,fontFamily:'serif',fontWeight: 'bold',fontStyle: 'italic',textAlign:'center'}} >SystemFixer</Text>
+                    </View>
+                </View>
+                <View style={{ marginLeft: 5, marginRight: 5, flex: 1,  }}>
 
                     <View style={styles.logo} >
-                        <Image source={require('../screens/assets/tips-for-repairing-a-laptop-748x421.jpeg')} style={styles.img} ></Image>
+                        <Image source={require('../screens/assets/756295.jpg')} style={styles.img} ></Image>
                         <View style={{ marginLeft: 10, marginTop: 8 }} >
-                            <Text style={styles.data} >Hassem mehboob</Text>
+        <Text style={styles.data} >{this.state.username}</Text>
                             <Text style={styles.data} >MUL</Text>
                         </View>
                     </View>
                     <View style={{ flex: 1 }} >
                         <Swiper
                             autoplay
-                            activeDotColor="gold"
+                            activeDotColor="#30336b"
                             >
                             <View style={styles.content}>
                                 <Image source={require('../screens/assets/Laptop-Repair.jpg')} style={styles.swiperimg} ></Image>
@@ -101,27 +95,27 @@ export default class testhomeComponent extends React.Component<testhomeProps, te
                             </View>
                         </Swiper>
                     </View>
-                    <View style={{ flex: 1 }} >
+                    <View style={{ flex: 0.85 }} >
 
                         <View style={{ flexDirection: 'row', flex: 1, }} >
 
                             <View style={{ flex: 1, alignItems: 'center', }} >
                                 <TouchableOpacity onPress={() => this.props.navigation.navigate('hardwarestart')} style={styles.button} >
-                                    <AntDesign name='laptop' color={'white'} style={{ borderWidth:1,borderRadius:100,borderColor:'white',padding:15 }} size={25} />
+                                    <Octicons name='tools' color={'#30336b'} style={{ borderColor:'#30336b',padding:15 }} size={25} />
                                     <Text style={styles.label}>Hardware Fix</Text>
                                     {/* <Text onPress={() => this.props.navigation.navigate('hardware')} style={styles.label} > Hardware Fix</Text> */}
                                 </TouchableOpacity>
                             </View>
                             <View style={{ flex: 1, alignItems: 'center', }} >
-                                <TouchableOpacity onPress={() => this.props.navigation.navigate('hardwarestart')} style={styles.button} >
-                                    <MaterialCommunityIcons  name='blender-software'  color={'white'} style={{ borderWidth:1,borderRadius:100,borderColor:'white',padding:15 , }} size={25} />
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate()} style={styles.button} >
+                                <FontAwesome5 name='laptop-medical' color={'#30336b'} style={{ borderColor:'#30336b',padding:15 , }} size={25} />
                                     <Text style={styles.label}>Software Fix</Text>
                                     {/* <Text onPress={() => this.props.navigation.navigate('hardware')} style={styles.label} > Hardware Fix</Text> */}
                                 </TouchableOpacity>
                             </View>
                             <View style={{ flex: 1, alignItems: 'center', }} >
                                 <TouchableOpacity onPress={() => this.props.navigation.navigate('hardwarestart')} style={styles.button} >
-                                    <MaterialIcons name='system-update-alt' color={'white'} style={{ borderWidth:1,borderRadius:100,borderColor:'white',padding:15 , }} size={25} />
+                                    <MaterialIcons name='system-update-alt' color={'#30336b'} style={{ borderColor:'#30336b',padding:15, }} size={25} />
                                     <Text style={styles.label}>Upgradation</Text>
                                     {/* <Text onPress={() => this.props.navigation.navigate('hardware')} style={styles.label} > Hardware Fix</Text> */}
                                 </TouchableOpacity>
@@ -133,23 +127,26 @@ export default class testhomeComponent extends React.Component<testhomeProps, te
                             <View style={{ flexDirection: 'row', flex: 1, }} >
 
                                 <View style={{ flex: 1, alignItems: 'center', }} >
-                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('hardwarestart')} style={styles.button} >
-                                        <AntDesign style={{ borderWidth:1,borderRadius:100,borderColor:'white',padding:15 , }} name='logout' color={'white'}  size={25} />
-                                        <Text style={styles.label}>Software Fix</Text>
+                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('applyshop')} style={styles.button} >
+                                    <Entypo name='shop' color={'#30336b'} style={{padding:15 , }} size={25} />
+                                        <Text style={styles.label}>Apply For Shop</Text>
+                                        <Text style={styles.label}>(registration)</Text>
                                         {/* <Text onPress={() => this.props.navigation.navigate('hardware')} style={styles.label} > Hardware Fix</Text> */}
                                     </TouchableOpacity>
                                 </View>
                                 <View style={{ flex: 1, alignItems: 'center', }} >
-                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('hardwarestart')} style={styles.button} >
-                                        <AntDesign  name='logout' color={'white'} style={{ borderWidth:1,borderRadius:100,borderColor:'white',padding:15 , }} size={25} />
-                                        <Text style={styles.label}>Software Fix</Text>
+                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('issues')} style={styles.button} >
+                                        <Fontisto  name='shopping-store' color={'#30336b'} style={{padding:15 , }} size={25} />
+                                        <Text style={styles.label}>Find shops</Text>
+                                        <Text style={styles.label}>(mechanics)</Text>
                                         {/* <Text onPress={() => this.props.navigation.navigate('hardware')} style={styles.label} > Hardware Fix</Text> */}
                                     </TouchableOpacity>
                                 </View>
                                 <View style={{ flex: 1, alignItems: 'center', }} >
-                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('hardwarestart')} style={styles.button} >
-                                        <AntDesign style={{ borderWidth:1,borderRadius:100,borderColor:'white',padding:15 , }} name='logout' color={'white'}  size={25} />
-                                        <Text style={styles.label}>Software Fix</Text>
+                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('maps')} style={styles.button} >
+                                        <Foundation style={{ padding:15 , }} name='map' color={'#30336b'}  size={25} />
+                                        <Text style={styles.label}>Find Shop</Text>
+                                        <Text style={styles.label}>(Near you)</Text>
                                         {/* <Text onPress={() => this.props.navigation.navigate('hardware')} style={styles.label} > Hardware Fix</Text> */}
                                     </TouchableOpacity>
                                 </View>
@@ -179,9 +176,10 @@ const styles = StyleSheet.create({
     },
     logout: {
         alignItems: 'flex-end',
-        paddingRight: 35,
+        paddingRight: 20,
         padding: 10,
-        backgroundColor: 'black'
+        
+        // backgroundColor: '#30336b'
     },
     textDetail: {
         fontSize: hp('3.5'),
@@ -198,7 +196,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: 'black'
+        // backgroundColor: 'black'
     },
     findView: {
         flexDirection: 'row-reverse',
@@ -243,7 +241,7 @@ const styles = StyleSheet.create({
     },
     bar: {
         color: 'white',
-        backgroundColor: '#f01f49',
+        // backgroundColor: '#f01f49',
 
     },
     img: {
@@ -253,11 +251,13 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 14,
-        color: 'gold',
+        color: 'black',
+        fontWeight: 'bold'
     },
     data: {
-        color: 'white',
-        fontSize: 16,
+        color: 'black',
+        fontSize: 18,
+        fontWeight: 'bold'
         // fontFamily: 'serif'
     },
     subtittle: {
@@ -266,16 +266,19 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 13,
         fontStyle: 'italic',
-        paddingLeft: 8
+        paddingLeft: 8,
+        
     },
     logo: {
+        flex: 0.25,
         flexDirection: 'row',
         padding: 20,
+        alignItems: 'center'
 
     },
     swiperimg: {
         // resizeMode: "cover",
-        height: 210,
+        height: 230,
         width: 400,
     },
     logo1: {
@@ -351,3 +354,14 @@ title='Help US'
 
 </View>
 </TouchableWithoutFeedback> */}
+
+
+// style={{
+//     textAlign: 'center',
+//     marginTop:30,
+//     width: 100,
+//     shadowOpacity: 1,
+//     textShadowColor: 'black',
+//     textShadowRadius: 30,
+//     textShadowOffset: { width: 2, height: 2 }
+//    }}

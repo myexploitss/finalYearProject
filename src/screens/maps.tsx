@@ -15,135 +15,90 @@ export interface mapsState {
 export default class mapsComponent extends React.Component<mapsProps, any> {
 
 	map: any;
-	
+
 	constructor(props: mapsProps) {
 		super(props);
-		this.getCurrentLocation();
+		// this.getCurrentLocation();
 		this.state = {
 			initialCoords: undefined,
-			currentCoordinates: [-73.98330688476561, 40.76975180901395],
+			currentCoordinates: [31.634664128, 74.351998592],
 			coordinates: [],
 			showDialog: false,
-			selectedShop: {}
+			selectedShop: {},
+			dataShop: ''
 		};
-		this.fetchAllShops();
+		// this.fetchAllShops();
 	}
 
-	fetchAllShops() {
+	getShopsDetails() {
 
-
-		// return fetch('https://reactnative.dev/movies.json')
-		// 	.then((response) => response.json())
-		// 	.then((json) => {
-				//   return json.movies;
+		return fetch('https://2b1115a1f1af.ngrok.io/shop')
+			.then((response) => response.json())
+			.then((json) => {
+				console.log(json);
 				this.setState({
-					coordinates: [
-						{
-							phone: '+9203054747099',
-							shopName: "this is my shop name",
-							shopDescription: "This is my descriptin sldf jsdl jjsdfl ljklk sdfjlsdfsldjf lsj lsdkfj lj lksdj flksdjf lsdfjsldkfj  lksjdfl ksdjflksd jflksdjf lksdjflskd fjlks fjlkdsfj ldksfj dslfk",
-							coordinates: [-73.98330688476561, 40.76975180901395]
-						},
-						{
-
-							phone: '+9203054747099',
-							shopName: "this is my shop name",
-							shopDescription: "This is my descriptin sldf jsdl jjsdfl ljklk sdfjlsdfsldjf lsj lsdkfj lj lksdj flksdjf lsdfjsldkfj  lksjdfl ksdjflksd jflksdjf lksdjflskd fjlks fjlkdsfj ldksfj dslfk",
-							coordinates: [-73.96682739257812, 40.761560925502806]
-						},
-						{
-
-							phone: '+9203054747099',
-							shopName: "this is my shop name",
-							shopDescription: "This is my descriptin sldf jsdl jjsdfl ljklk sdfjlsdfsldjf lsj lsdkfj lj lksdj flksdjf lsdfjsldkfj  lksjdfl ksdjflksd jflksdjf lksdjflskd fjlks fjlkdsfj ldksfj dslfk",
-							coordinates: [-74.00751113891602, 40.746346606483826]
-						},
-						{
-
-							phone: '+9203054747099',
-							shopName: "this is my shop name",
-							shopDescription: "This is my descriptin sldf jsdl jjsdfl ljklk sdfjlsdfsldjf lsj lsdkfj lj lksdj flksdjf lsdfjsldkfj  lksjdfl ksdjflksd jflksdjf lksdjflskd fjlks fjlkdsfj ldksfj dslfk",
-							coordinates: [-73.95343780517578, 40.7849607714286]
-						},
-						{
-
-							phone: '+9203054747099',
-							shopName: "this is my shop name",
-							shopDescription: "This is my descriptin sldf jsdl jjsdfl ljklk sdfjlsdfsldjf lsj lsdkfj lj lksdj flksdjf lsdfjsldkfj  lksjdfl ksdjflksd jflksdjf lksdjflskd fjlks fjlkdsfj ldksfj dslfk",
-							coordinates: [-73.99017333984375, 40.71135347314246]
-						},
-						{
-
-							phone: '+9203054747099',
-							shopName: "this is my shop name",
-							shopDescription: "This is my descriptin sldf jsdl jjsdfl ljklk sdfjlsdfsldjf lsj lsdkfj lj lksdj flksdjf lsdfjsldkfj  lksjdfl ksdjflksd jflksdjf lksdjflskd fjlks fjlkdsfj ldksfj dslfk",
-							coordinates: [-73.98880004882812, 40.758960433915284]
-						},
-						{
-
-							phone: '+9203054747099',
-							shopName: "this is my shop name",
-							shopDescription: "This is my descriptin sldf jsdl jjsdfl ljklk sdfjlsdfsldjf lsj lsdkfj lj lksdj flksdjf lsdfjsldkfj  lksjdfl ksdjflksd jflksdjf lksdjflskd fjlks fjlkdsfj ldksfj dslfk",
-							coordinates: [-73.96064758300781, 40.718379593199494]
-						},
-						{
-
-							phone: '+9203054747099',
-							shopName: "this is my shop name",
-							shopDescription: "This is my descriptin sldf jsdl jjsdfl ljklk sdfjlsdfsldjf lsj lsdkfj lj lksdj flksdjf lsdfjsldkfj  lksjdfl ksdjflksd jflksdjf lksdjflskd fjlks fjlkdsfj ldksfj dslfk",
-							coordinates: [-73.95172119140624, 40.82731951134558]
-						},
-						{
-
-							phone: '+9203054747099',
-							shopName: "this is my shop name",
-							shopDescription: "This is my descriptin sldf jsdl jjsdfl ljklk sdfjlsdfsldjf lsj lsdkfj lj lksdj flksdjf lsdfjsldkfj  lksjdfl ksdjflksd jflksdjf lksdjflskd fjlks fjlkdsfj ldksfj dslfk",
-							coordinates: [-73.9829635620117, 40.769101775774935]
-						},
-						{
-
-							phone: '+9203054747099',
-							shopName: "this is my shop name",
-							shopDescription: "This is my descriptin sldf jsdl jjsdfl ljklk sdfjlsdfsldjf lsj lsdkfj lj lksdj flksdjf lsdfjsldkfj  lksjdfl ksdjflksd jflksdjf lksdjflskd fjlks fjlkdsfj ldksfj dslfk",
-							coordinates: [-73.9822769165039, 40.76273111352534]
-						}
-					]
-				});
-
-			// // })
-			// // .catch((error) => {
-			// // 	console.error(error);
-			// });
-
+					coordinates: json
+				})
+				console.log(this.state.coordinates)
+			})
+			.catch((error) => {
+				console.error('error in blooddetailss');
+			});
 
 	}
 
-	async componentDidMount() {
-		if (Platform.OS === 'ios') {
-			this.getCurrentLocation();
-		} else {
-			try {
-				const granted = await PermissionsAndroid.request(
-					PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-					{
-						title: 'Device current location permission',
-						message:
-							'Allow app to get your current location',
-						buttonNeutral: 'Ask Me Later',
-						buttonNegative: 'Cancel',
-						buttonPositive: 'OK',
-					},
-				);
-				if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-					this.getCurrentLocation();
-				} else {
-					console.log('Location permission denied');
-				}
-			} catch (err) {
-				console.warn(err);
+
+	// fetchAllShops() {
+
+
+	// 	// return fetch('https://reactnative.dev/movies.json')
+	// 	// 	.then((response) => response.json())
+	// 	// 	.then((json) => {
+	// 			//   return json.movies;
+	// 			this.setState({
+	// 				coordinates: [
+	// 					{
+	// 						phone: '+9203054747099',
+	// 						shopName: "this is my shop name",
+	// 						shopDescription: "This is my descriptin sldf jsdl jjsdfl ljklk sdfjlsdfsldjf lsj lsdkfj lj lksdj flksdjf lsdfjsldkfj  lksjdfl ksdjflksd jflksdjf lksdjflskd fjlks fjlkdsfj ldksfj dslfk",
+	// 						coordinates: [-73.98330688476561, 40.76975180901395]
+	// 					},
+
+	// 				]
+	// 			});
+
+	// // })
+	// // .catch((error) => {
+	// // 	console.error(error);
+	// });
+
+
+
+	async requestlocationPermission() {
+		try {
+			const granted = await PermissionsAndroid.request(
+				PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+			)
+			if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+
+				this.getCurrentLocation()
+
+			} else {
+				alert("Camera permission denied")
 			}
+		} catch (err) {
+			console.warn(err)
 		}
 	}
+
+
+	componentDidMount() {
+		this.getShopsDetails();
+		this.requestlocationPermission();
+		// console.log("called")
+
+	}
+
 
 	getCurrentLocation() {
 		Geolocation.getCurrentPosition((position) => {
@@ -173,7 +128,7 @@ export default class mapsComponent extends React.Component<mapsProps, any> {
 				key={id}
 				id={id}
 				title='Shop Name'
-				coordinate={shopData.coordinates}
+				coordinate={[shopData.longitude, shopData.latitude]}
 				onSelected={(marker) => {
 					this.setState({
 						selectedShop: shopData
@@ -205,8 +160,12 @@ export default class mapsComponent extends React.Component<mapsProps, any> {
 
 	public render() {
 		return (
-			<View style={styles.container} >
+
+			<View style={styles.container}
+			>
+
 				<View style={styles.container} >
+					<Text>{this.state.dataShop.longitude}</Text>
 					<MapboxGL.MapView attributionEnabled={true}
 						styleURL="mapbox://styles/hassemmehboob/ckb142mgy1dgp1ilijx09jk9c"
 						ref={map => { this.map = map; }}
@@ -218,14 +177,14 @@ export default class mapsComponent extends React.Component<mapsProps, any> {
 					{
 						this.state.showDialog ?
 							<View>
-								<Dialog.Container visible={true}>
+								{/* <Dialog.Container visible={true}>
 									<Dialog.Title>{this.state.selectedShop.shopName}</Dialog.Title>
 									<Dialog.Description>
 										{this.state.selectedShop.shopDescription}
 									</Dialog.Description>
 									<Dialog.Button label="Contact US" onPress={this.handelContactUs} />
 									<Dialog.Button label="Cancel" onPress={this.handleCancel} />
-								</Dialog.Container>
+								</Dialog.Container> */}
 							</View>
 							: null
 					}
@@ -233,7 +192,9 @@ export default class mapsComponent extends React.Component<mapsProps, any> {
 				{/* <View style={styles.container} >
 					<Text style={styles.container} >hassem</Text>
 				</View> */}
+
 			</View>
+
 		);
 	}
 }
