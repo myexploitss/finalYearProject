@@ -168,8 +168,7 @@ export default class AppComponent extends React.Component<AppProps, any> {
   
 
   HomeStackScreen() {
-
-  const HomeStack = createStackNavigator();
+    const HomeStack = createStackNavigator();
 
   return (
     <HomeStack.Navigator  >
@@ -181,7 +180,6 @@ export default class AppComponent extends React.Component<AppProps, any> {
 }
 
   homeFunction() {
-  
     return (
       <Tab.Navigator
 
@@ -200,7 +198,7 @@ export default class AppComponent extends React.Component<AppProps, any> {
             marginBottom: 2
           },
         }}>
-        <Tab.Screen name="testhome" component={testhomeComponent}
+        <Tab.Screen name="testhome" component={this.HomeStackScreen}
           options={{
             tabBarLabel: 'Home',
             tabBarIcon: ({ tintColor }) => (
@@ -227,6 +225,7 @@ export default class AppComponent extends React.Component<AppProps, any> {
 
     )
   }
+  
   AccountStackScreen() {
     const AccountStack = createStackNavigator();
 
@@ -242,9 +241,11 @@ export default class AppComponent extends React.Component<AppProps, any> {
       </AccountStack.Navigator>
     );
   }
+
   componentDidMount() {
 
   }
+
   public render() {
     const userId = AsyncStorage.getItem('userId', (err, userId) => {
       if (userId) {
@@ -261,6 +262,7 @@ export default class AppComponent extends React.Component<AppProps, any> {
       <NavigationContainer>
         {
           this.state.isLoggedIn ? (
+            this.HomeStackScreen(),
             this.homeFunction()
             // <Stack.Navigator  initialRouteName="home" headerMode='none' >
             //   <Stack.Screen name="swiper" component={swiperComponent} />

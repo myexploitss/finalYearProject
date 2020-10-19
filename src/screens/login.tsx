@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 export interface loginProps {
-  navigation:any
+  navigation: any
 }
 
 export interface loginState {
@@ -26,7 +26,7 @@ export default class loginComponent extends React.Component<loginProps, loginSta
       // password:String
     }
   }
-    
+
   login() {
     console.log("called")
     fetch("https://5bace0f01483.ngrok.io/login", {
@@ -38,21 +38,24 @@ export default class loginComponent extends React.Component<loginProps, loginSta
         "email": this.state.form.email,
         "password": this.state.form.password
       })
-    }
-    ).then(response => response.json())
+    }).then(response => response.json())
       .then(data => {
-  
-        AsyncStorage.setItem('username',data.username);
-        console.log(data.username)   
-        AsyncStorage.setItem('userId' ,(data.userId)).then((res) => {
-          console.log(data.userId)      
-          alert('login Succesfully')
-        
+        if (data.userId && data.username) {
+          AsyncStorage.setItem('username', data.username);
+          console.log(data.username)
+          AsyncStorage.setItem('userId', (data.userId)).then((res) => {
+            console.log(data.userId)
+            alert('login Succesfully');   
+          })
+        } else {
+          alert('Login failed! Please try again.')
+        }
+      }).catch(() => {
+        alert('Login failed! Please try again.')
         })
-      })
-      }  
-  
-  
+  }
+
+
   render() {
 
     return (
@@ -78,7 +81,7 @@ export default class loginComponent extends React.Component<loginProps, loginSta
             onSubmit={(values, actions) => {
               console.log(values);
               this.setState({ form: values });
-              this.login() 
+              this.login()
               actions.resetForm();
             }}>
             {props => (
@@ -101,25 +104,25 @@ export default class loginComponent extends React.Component<loginProps, loginSta
                   style={styles.input}
                   placeholderTextColor="#7f7e87"
                 />
-                <Text style={styles.error}>{props.touched.password&&props.errors.password}</Text>
-               
+                <Text style={styles.error}>{props.touched.password && props.errors.password}</Text>
+
                 {/* <TouchableOpacity onPress={props.handleSubmit} style={styles.button} > */}
                 <TouchableOpacity onPress={props.handleSubmit} style={styles.button} >
                   <Text style={styles.buttext}  >Log in</Text>
                 </TouchableOpacity>
-                <TouchableOpacity   onPress={() => this.props.navigation.navigate('testhome')}  >
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('testhome')}  >
 
-                <View style={{justifyContent: "center",alignItems:'center',marginTop:40}}>
-                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', margin: 20 }}>
-      
-                  <Text style={{color:'#7f7e87'}} >Don't Have an Account? </Text>
-                  <Text style={{ fontWeight: 'bold' }} >Sign Up!</Text>
-                </View>
-                <Text style={{color:'#7f7e87'}} >Forgot Password?</Text>
-                </View>
+                  <View style={{ justifyContent: "center", alignItems: 'center', marginTop: 40 }}>
+                    <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', margin: 20 }}>
+
+                      <Text style={{ color: '#7f7e87' }} >Don't Have an Account? </Text>
+                      <Text style={{ fontWeight: 'bold' }} >Sign Up!</Text>
+                    </View>
+                    <Text style={{ color: '#7f7e87' }} >Forgot Password?</Text>
+                  </View>
                 </TouchableOpacity>
-                
-                 
+
+
               </View>
             )}
 
@@ -148,10 +151,10 @@ const styles = StyleSheet.create({
   },
   textDetail: {
     fontSize: hp('4'),
-    textAlign:'center',
-    fontFamily:'serif',
-    
-    },
+    textAlign: 'center',
+    fontFamily: 'serif',
+
+  },
   stl: {
     backgroundColor: 'rgba(0,0,0,0.9)',
     height: 100,
@@ -167,12 +170,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: hp('8'),
   },
-  
+
 
   colors: {
     padding: hp('2.5'),
     // marginTop: hp('7')
-    marginVertical:30
+    marginVertical: 30
   },
   swiperimg: {
     height: hp('15'),
@@ -180,7 +183,7 @@ const styles = StyleSheet.create({
 
 
   },
-  
+
 
 
   button: {

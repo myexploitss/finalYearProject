@@ -82,21 +82,17 @@ export default class CreatAcountComponent extends React.Component<CreatAcountPro
                     const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
                         {
                             'title': 'Location Access required ',
-                            'message': 'this location is the exect location of your shop  which you want to registered ' +
-                                'kindle apply for  your shop when you are in the shop'+
-        
-        
-                                alert('tap me') ,
+                            'message': 'this location is the exect location of your shop which you want to registered kindle apply for your shop when you are in the shop'
                         }
                     )
                     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                        alert("You've access for the location");
+                        // alert("You've access for the location");
                         this.getCurrentLocation()
                     } else {
                         alert("You don't have access for the location");
                     }
                 } catch (err) {
-                    alert(err)
+                    alert(err);
                 }
             }
         };
