@@ -22,7 +22,7 @@ export default class mapsComponent extends React.Component<mapsProps, any> {
 		this.state = {
 			initialCoords: undefined,
 			currentCoordinates: [31.634664128, 74.351998592],
-			coordinates: [],
+			coordinates: [["74.34450699", "31.42120959"], ["74.34463599", "31.42117029"], ["74.35913435", "31.38080528"]],
 			showDialog: false,
 			selectedShop: {},
 			dataShop: ''
@@ -32,14 +32,22 @@ export default class mapsComponent extends React.Component<mapsProps, any> {
 
 	getShopsDetails() {
 
-		return fetch('https://2b1115a1f1af.ngrok.io/shop')
+		return fetch('https://5bace0f01483.ngrok.io/shop')
 			.then((response) => response.json())
 			.then((json) => {
 				console.log(json);
+				// let rawData: [] = json;
+				// let data: any = [];
+				// rawData.forEach((item: any) => {
+				// 	if (item.longitude, item.latitude) {
+				// 		data.push([item.longitude, item.latitude])
+				// 	}
+				// });
+				
 				this.setState({
 					coordinates: json
 				})
-				console.log(this.state.coordinates)
+
 			})
 			.catch((error) => {
 				console.error('error in blooddetailss');
@@ -112,9 +120,11 @@ export default class mapsComponent extends React.Component<mapsProps, any> {
 	}
 
 	renderAnnotations() {
-		const items = [];
+		const items: any = [];
 		for (let i = 0; i < this.state.coordinates.length; i++) {
-			items.push(this.renderAnnotation(i));
+			if (this.state.coordinates[i] && this.state.coordinates[i].longitude, this.state.coordinates[i].latitude) {
+				items.push(this.renderAnnotation(i));
+			}
 		}
 		return items;
 	}
@@ -123,12 +133,16 @@ export default class mapsComponent extends React.Component<mapsProps, any> {
 	renderAnnotation(counter) {
 		const id = `pointAnnotation${counter}`;
 		const shopData = this.state.coordinates[counter];
+		console.log(shopData);
+		console.log('----------------------');
 		return (
+			// "latitude": "31.38080528", "longitude":s ""
+
 			<MapboxGL.PointAnnotation
 				key={id}
 				id={id}
 				title='Shop Name'
-				coordinate={[shopData.longitude, shopData.latitude]}
+				coordinate={[(shopData.longitude), (shopData.latitude)]}
 				onSelected={(marker) => {
 					this.setState({
 						selectedShop: shopData
@@ -155,36 +169,37 @@ export default class mapsComponent extends React.Component<mapsProps, any> {
 
 	handelContactUs = () => {
 		this.setState({ showDialog: false });
-		Linking.openURL('whatsapp://send?text=hello sir&phone=' + this.state.selectedShop.phone)
+		Linking.openURL('whatsapp://send?text=hello sir&phone=' + this.state.selectedShop.contactinfo)
 	};
 
 	public render() {
 		return (
 
-			<View style={styles.container}
-			>
+			<View style={styles.container}>
 
 				<View style={styles.container} >
-					<Text>{this.state.dataShop.longitude}</Text>
 					<MapboxGL.MapView attributionEnabled={true}
-						styleURL="mapbox://styles/hassemmehboob/ckb142mgy1dgp1ilijx09jk9c"
 						ref={map => { this.map = map; }}
 						style={styles.map} >
 						<MapboxGL.Camera centerCoordinate={this.state.currentCoordinates} zoomLevel={15} />
 						<MapboxGL.UserLocation animated={true} visible={true} />
+						{/* styleURL="mapbox://styles/hassemmehboob/ckb142mgy1dgp1ilijx09jk9c" */}
 						{this.renderAnnotations()}
 					</MapboxGL.MapView>
 					{
 						this.state.showDialog ?
 							<View>
-								{/* <Dialog.Container visible={true}>
-									<Dialog.Title>{this.state.selectedShop.shopName}</Dialog.Title>
+								<Dialog.Container visible={true}>
+									<Dialog.Title>Shop Name: {this.state.selectedShop?.username}</Dialog.Title>
 									<Dialog.Description>
-										{this.state.selectedShop.shopDescription}
+										Description:{this.state.selectedShop?.aboutyourself}
+									</Dialog.Description>
+									<Dialog.Description>
+										Address:{this.state.selectedShop?.adress}
 									</Dialog.Description>
 									<Dialog.Button label="Contact US" onPress={this.handelContactUs} />
 									<Dialog.Button label="Cancel" onPress={this.handleCancel} />
-								</Dialog.Container> */}
+								</Dialog.Container>
 							</View>
 							: null
 					}

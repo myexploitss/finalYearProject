@@ -29,7 +29,7 @@ export default class loginComponent extends React.Component<loginProps, loginSta
     
   login() {
     console.log("called")
-    fetch("https://2b1115a1f1af.ngrok.io/login", {
+    fetch("https://5bace0f01483.ngrok.io/login", {
       method: "Post",
       headers: {
         'Content-Type': 'Application/json'

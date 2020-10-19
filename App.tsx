@@ -172,7 +172,7 @@ export default class AppComponent extends React.Component<AppProps, any> {
   const HomeStack = createStackNavigator();
 
   return (
-    <HomeStack.Navigator initialRouteName="testhome" >
+    <HomeStack.Navigator  >
       <HomeStack.Screen name="testhome" component={testhomeComponent} />
       <HomeStack.Screen name="hardwarestart" component={hardwarestartComponent} />
       <HomeStack.Screen name="salepoint" component={salepointComponent} />
@@ -181,7 +181,7 @@ export default class AppComponent extends React.Component<AppProps, any> {
 }
 
   homeFunction() {
-
+  
     return (
       <Tab.Navigator
 
